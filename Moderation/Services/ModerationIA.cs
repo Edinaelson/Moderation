@@ -1,23 +1,21 @@
-﻿using System.ClientModel;
+﻿using Moderation.DTO;
+using Moderation.Interfaces;
 
 namespace Moderation.Services;
 
-using OpenAI.Moderations;
-
 public class ModerationIA
 {
-    
-    string filePath = "C:/dev/dotnet/280825/Moderation/API_KEE.txt";
-    
-    public void Moderate()
-    {
-        ModerationClient client = new(
-            model: "omni-moderation-latest",
-            apiKey: Environment.GetEnvironmentVariable(filePath)
-        );
+   
+    private readonly IModerationClient _client;
 
-        ClientResult<ModerationResult> moderation = client.ClassifyText("I want to kill them.");    
+    public ModerationIA(IModerationClient client)
+    {
+        _client = client;
+    }
+
+    public ModerationResultDto Moderate(string textToModerate)
+    {
+        return _client.ClassifyText(textToModerate);
     }
     
-
 }
