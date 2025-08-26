@@ -4,5 +4,5 @@ namespace Moderation.Interfaces;
 
 public interface IModerationClient
 {
-        ModerationResultDto ClassifyText(string input);
+    Task<bool> IsIllicitOrViolentAsync(string text);
 }

@@ -1,3 +1,6 @@
+using Moderation.Interfaces;
+using Moderation.Services;
+
 namespace Moderation;
 
 public class Program
@@ -5,13 +8,17 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-        // Add services to the container.
+        
+        var apiKey = builder.Configuration["Gemini:GOOGLE_API_KEY"]
+                     ?? throw new Exception("API Key do Gemini não configurada!");
+        
+        builder.Services.AddHttpClient<IModerationClient, GeminiModerationService>();
+        
+        builder.Services.AddSingleton<ModerationIA>();
         builder.Services.AddAuthorization();
-
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddControllers();
 
         var app = builder.Build();
 
@@ -23,9 +30,8 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
         app.UseAuthorization();
-
+        app.MapControllers();
         app.Run();
     }
 }

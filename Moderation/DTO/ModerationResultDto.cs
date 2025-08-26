@@ -1,11 +1,3 @@
-﻿using OpenAI.Moderations;
+﻿namespace Moderation.DTO;
 
-namespace Moderation.DTO;
-
-public record ModerationResultDto(
-    bool Flagged,
-    bool Violence,
-    bool SelfHarm,
-    bool Sexual,
-    bool Hate
-    );
+public record ModerationResultDto(bool IllicitOrViolence, string? Text = null);

@@ -1,5 +1,4 @@
-﻿using Moderation.DTO;
-using Moderation.Interfaces;
+﻿using Moderation.Interfaces;
 
 namespace Moderation.Services;
 
@@ -13,9 +12,9 @@ public class ModerationIA
         _client = client;
     }
 
-    public ModerationResultDto Moderate(string textToModerate)
+    public Task<bool> Moderate(string textToModerate)
     {
-        return _client.ClassifyText(textToModerate);
+        return  _client.IsIllicitOrViolentAsync(textToModerate);
     }
     
 }
