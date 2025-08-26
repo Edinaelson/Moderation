@@ -15,15 +15,27 @@ public class ModerationClientAdapter : IModerationClient
 
     public ModerationResultDto ClassifyText(string input)
     {
-        
-        var sdkResult = _client.ClassifyText(input).Value;
+        int retries = 3;
+        int delay = 2000; // 2 segundos
 
-        return new ModerationResultDto(
-            Flagged: sdkResult.Flagged,
-            Violence: sdkResult.Violence.Flagged,
-            SelfHarm: sdkResult.SelfHarm.Flagged,
-            Sexual: sdkResult.Sexual.Flagged,
-            Hate: sdkResult.Hate.Flagged
-        ); 
+        for (int i = 0; i < retries; i++)
+        {
+            try
+            {
+                var sdkResult = _client.ClassifyText(input).Value;
+                return new ModerationResultDto(IllicitOrViolence: sdkResult.Violence.Flagged);
+            }
+            catch (System.ClientModel.ClientResultException ex) when (ex.Status == 429)
+            {
+                if (i == retries - 1)
+                    throw; // última tentativa, propaga o erro
+
+                Thread.Sleep(delay);
+                delay *= 2; // backoff exponencial
+            }
+        }
+
+        // nunca chega aqui
+        return new ModerationResultDto(IllicitOrViolence: false);
     }
 }

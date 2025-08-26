@@ -16,11 +16,7 @@ public class ModerationIATest
         var mockClient = new Mock<IModerationClient>();
         
         var fakeResponse = new ModerationResultDto(
-            Flagged: true,
-            Violence: true,
-            SelfHarm: false,
-            Sexual: false,
-            Hate: false
+            IllicitOrViolence: true
         );
         
         mockClient.Setup(c => c.ClassifyText(It.IsAny<string>()))
@@ -30,11 +26,9 @@ public class ModerationIATest
         
         var result = service.Moderate("I want to kill them.");
         
-        Assert.IsTrue(result.Flagged);
-        Assert.IsTrue(result.Violence);
-        Assert.IsFalse(result.SelfHarm);
-        Assert.IsFalse(result.Sexual);
-        Assert.IsFalse(result.Hate);
+       
+        Assert.IsTrue(result.IllicitOrViolence);
+        
 
     }
     
