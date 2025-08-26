@@ -1,8 +1,5 @@
-using Moderation.Adapter;
 using Moderation.Interfaces;
 using Moderation.Services;
-using Moderation.Utils;
-using OpenAI.Moderations;
 
 namespace Moderation;
 
@@ -11,14 +8,12 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-        var apiKey = ApiKee.GetApiKey();
         
-        builder.Services.AddSingleton(new ModerationClient(
-            model: "omni-moderation-latest",
-            apiKey: apiKey
-        ));
-        builder.Services.AddSingleton<IModerationClient, ModerationClientAdapter>();
+        var apiKey = builder.Configuration["Gemini:GOOGLE_API_KEY"]
+                     ?? throw new Exception("API Key do Gemini não configurada!");
+        
+        builder.Services.AddHttpClient<IModerationClient, GeminiModerationService>();
+        
         builder.Services.AddSingleton<ModerationIA>();
         builder.Services.AddAuthorization();
         builder.Services.AddEndpointsApiExplorer();

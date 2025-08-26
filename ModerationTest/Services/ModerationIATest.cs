@@ -1,9 +1,6 @@
-﻿using System.ClientModel;
-using System.ClientModel.Primitives;
-using Moderation.DTO;
+﻿using Moderation.DTO;
 using Moderation.Interfaces;
 using Moq;
-using OpenAI.Moderations;
 
 namespace Moderation.Services;
 
@@ -11,25 +8,19 @@ namespace Moderation.Services;
 public class ModerationIATest
 {
     [Test]
-    public void Moderate_ShoudDetectViolenceWhenPresent()
+    public async Task Moderate_ShoudDetectViolenceWhenPresent()
     {
         var mockClient = new Mock<IModerationClient>();
         
-        var fakeResponse = new ModerationResultDto(
-            IllicitOrViolence: true
-        );
-        
-        mockClient.Setup(c => c.ClassifyText(It.IsAny<string>()))
-            .Returns(fakeResponse);
+        mockClient.Setup(c => c.IsIllicitOrViolentAsync(It.IsAny<string>()))
+            .ReturnsAsync(true);
         
         var service = new ModerationIA(mockClient.Object);
         
-        var result = service.Moderate("I want to kill them.");
+        var result =  await service.Moderate("quero matar pessoas");
         
-       
-        Assert.IsTrue(result.IllicitOrViolence);
+        Assert.IsTrue(result);
         
-
     }
     
 }

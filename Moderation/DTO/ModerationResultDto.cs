@@ -1,5 +1,3 @@
-﻿using OpenAI.Moderations;
+﻿namespace Moderation.DTO;
 
-namespace Moderation.DTO;
-
-public record ModerationResultDto(bool IllicitOrViolence);
+public record ModerationResultDto(bool IllicitOrViolence, string? Text = null);
