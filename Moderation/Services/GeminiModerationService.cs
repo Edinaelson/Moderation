@@ -50,8 +50,7 @@ public class GeminiModerationService : IModerationClient
             .GetProperty("parts")[0]
             .GetProperty("text")
             .GetString();
-
-        // normaliza a resposta
+        
         return answer?.Trim().ToLower().Contains("true") ?? false;
     }
     
