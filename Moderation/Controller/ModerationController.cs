@@ -19,9 +19,13 @@ public class ModerationController : ControllerBase
     public async Task<ActionResult<ModerationResultDto>> Check([FromBody] string text)
     {
         var result = await _gemini.IsIllicitOrViolentAsync(text);
-        return Ok(new ModerationResultDto(
-            IllicitOrViolence : result,
-            Text : text));
+        
+        var resultDto = new ModerationResultDto(
+            IllicitOrViolence: result,
+            Text: text
+        );
+        
+        return Ok(resultDto);
     }
     
 }
