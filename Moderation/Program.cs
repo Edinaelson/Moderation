@@ -1,5 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Moderation.Data;
 using Moderation.Interfaces;
 using Moderation.Services;
+
 
 namespace Moderation;
 
@@ -12,12 +16,27 @@ public class Program
         var apiKey = builder.Configuration["Gemini:GOOGLE_API_KEY"]
                      ?? throw new Exception("API Key do Gemini não configurada!");
         
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        
+        builder.Services.AddEndpointsApiExplorer();
+        
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo 
+            { 
+                Title = "API de Moderação", 
+                Version = "v1" 
+            });
+    
+            // Ativa os atributos de anotação
+            c.EnableAnnotations();
+        });
+        
         builder.Services.AddHttpClient<IModerationClient, GeminiModerationService>();
         
         builder.Services.AddSingleton<ModerationIA>();
         builder.Services.AddAuthorization();
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
         builder.Services.AddControllers();
 
         var app = builder.Build();
@@ -26,7 +45,11 @@ public class Program
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API de Moderação v1");
+            });
+           
         }
 
         app.UseHttpsRedirection();
