@@ -16,6 +16,8 @@ public class Program
         var apiKey = builder.Configuration["Gemini:GOOGLE_API_KEY"]
                      ?? throw new Exception("API Key do Gemini não configurada!");
         
+        Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));;
+        
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
         
