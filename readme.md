@@ -15,6 +15,21 @@ Sistema ASP.NET Core para análise e registro de textos potencialmente ilícitos
 - Docker e Docker Compose
 - SQL Server 2022 (container oficial Microsoft)
 
+## ntegração com Gemini (Google)
+- Site oficial (docs): [https://ai.google.dev/](https://ai.google.dev/)
+- Documentação da Gemini API: [https://ai.google.dev/gemini-api/docs](https://ai.google.dev/gemini-api/docs)
+- Obter chave de API (AI Studio): [https://aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
+- Modelos disponíveis: [https://ai.google.dev/gemini-api/docs/models](https://ai.google.dev/gemini-api/docs/models)
+- Políticas e segurança (Safety): [https://ai.google.dev/gemini-api/docs/safety](https://ai.google.dev/gemini-api/docs/safety)
+- Políticas de uso: [https://ai.google.dev/policies](https://ai.google.dev/policies)
+- Termos de uso: [https://ai.google.dev/terms](https://ai.google.dev/terms)
+- Preços: [https://ai.google.dev/pricing](https://ai.google.dev/pricing)
+- Cotas e limites: [https://ai.google.dev/gemini-api/docs/quotas](https://ai.google.dev/gemini-api/docs/quotas)
+
+Observações:
+- Defina a variável de ambiente Gemini:GOOGLE_API_KEY. Sem ela, a API não inicia.
+- Em produção, armazene a chave de forma segura (secret manager, variáveis de ambiente, vault).
+
 ## Arquitetura (visão geral)
 
 - API exposta em HTTP com endpoints REST.
