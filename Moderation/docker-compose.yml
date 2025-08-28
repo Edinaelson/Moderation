@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  api:
+    container_name: api
+    restart: always
+    build:
+      context: ./   # pasta do seu projeto .NET
+      dockerfile: ./Dockerfile
+    ports:
+      - "7007:8080"
+    environment:
+      TZ: America/Sao_Paulo
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=ModerationDb;User Id=sa;CrieSuaSenhaAqui;TrustServerCertificate=True;"
+    depends_on:
+      - sqlserver
+
+  sqlserver:
+    container_name: sqlserver
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: always
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "CrieSuaSenhaAqui"
+      MSSQL_PID: "Developer"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+volumes:
+  sql_data:
